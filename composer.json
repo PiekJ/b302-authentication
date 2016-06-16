@@ -1,0 +1,24 @@
+{
+    "name": "piek-j/b302-authentication",
+    "description": "",
+    "authors": [
+        {
+            "name": "Jos Piek",
+            "email": "jos@b302.nl"
+        }
+    ],
+    "require": {
+        "php": ">=5.4.0",
+        "zizaco/entrust": "1.2.*@dev",
+        "lud/club": "~1.0"
+    },
+    "autoload": {
+        "classmap": [
+            "src/migrations"
+        ],
+        "psr-0": {
+            "PiekJ\\B302Authentication\\": "src/"
+        }
+    },
+    "minimum-stability": "stable"
+}
