@@ -35,12 +35,19 @@ class B302AuthenticationServiceProvider extends ServiceProvider {
 		$this->app->alias('Entrust', 'Zizaco\Entrust\EntrustFacade');
 
 		// Register the install command
-		$this->app['command.b302-authentication.install'] = $this->app->share(function($app)
+		$this->app['command.b302-authentication.create-tables'] = $this->app->share(function($app)
         {
-            return new InstallCommand();
+            return new CreateTablesCommand();
         });
 
-        $this->commands(array('command.b302-authentication.install'));
+        $this->commands(array('command.b302-authentication.create-tables'));
+
+        $this->app['command.b302-authentication.create-user'] = $this->app->share(function($app)
+        {
+            return new CreateUserCommand();
+        });
+
+        $this->commands(array('command.b302-authentication.create-user'));
 	}
 
 }

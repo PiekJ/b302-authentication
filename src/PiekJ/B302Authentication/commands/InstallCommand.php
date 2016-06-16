@@ -3,8 +3,6 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Zizaco\Entrust\EntrustRole;
-use Zizaco\Entrust\EntrustPermission;
 use Lud\Club\Club;
 use Hash;
 
@@ -65,13 +63,13 @@ class InstallCommand extends Command {
 		$adminUser->password = Hash::make('admin');
 		$adminUser->save();
 
-		$adminRole = new EntrustRole();
+		$adminRole = new Role();
 		$adminRole->name = 'Admin';
 		$adminRole->save();
 
 		$adminUser->attachRole($adminRole);
 
-		$manageUsersPermission = new EntrustPermission();
+		$manageUsersPermission = new Permission();
 		$manageUsersPermission->name = 'manage_users';
 		$manageUsersPermission->display_name = 'Manage Users';
 		$manageUsersPermission->save();

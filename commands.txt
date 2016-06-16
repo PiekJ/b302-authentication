@@ -1,2 +1,4 @@
 php artisan view:publish --path="workbench/piek-j/b302-authentication/vendor/lud/club/src/views" lud/club
 php artisan config:publish --path="workbench/piek-j/b302-authentication/vendor/lud/club/src/config" lud/club
+
+php artisan config:publish zizaco/entrust
