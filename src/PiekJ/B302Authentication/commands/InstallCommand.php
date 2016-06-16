@@ -3,6 +3,10 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
+use Zizaco\Entrust\EntrustRole;
+use Zizaco\Entrust\EntrustPermission;
+use Lud\Club\Club;
+use Hash;
 
 class InstallCommand extends Command {
 
@@ -21,6 +25,13 @@ class InstallCommand extends Command {
 	protected $description = 'Installs the authentication packages.';
 
 	/**
+	 * The model to use to create a admin user.
+	 *
+	 * @var string
+	 */
+	private $modelName;
+
+	/**
 	 * Create a new command instance.
 	 *
 	 * @return void
@@ -28,6 +39,8 @@ class InstallCommand extends Command {
 	public function __construct()
 	{
 		parent::__construct();
+
+		$this->modelName = Club::modelName();
 	}
 
 	/**
@@ -42,9 +55,28 @@ class InstallCommand extends Command {
 		$this->call('auth:reminders-table');
 
 		$this->info('Installing Zizaco/entrust');
-		$this->call('entrust:migration')
+		$this->call('entrust:migration');
 
 		$this->call('migrate');
+
+		$this->info('Create default admin user with default rights');
+		$adminUser = new $this->modelName();
+		$adminUser->email = 'admin@admin.nl';
+		$adminUser->password = Hash::make('admin');
+		$adminUser->save();
+
+		$adminRole = new EntrustRole();
+		$adminRole->name = 'Admin';
+		$adminRole->save();
+
+		$adminUser->attachRole($adminRole);
+
+		$manageUsersPermission = new EntrustPermission();
+		$manageUsersPermission->name = 'manage_users';
+		$manageUsersPermission->display_name = 'Manage Users';
+		$manageUsersPermission->save();
+
+		$adminRole->perms()->sync(array($manageUsersPermission->id));
 	}
 
 	/**
