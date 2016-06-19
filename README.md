@@ -27,4 +27,5 @@ You can use the command ``php artisan view:publish piek-j\b302-authentication`` 
 ### More information
 
 Authenticatio, take a look at [Zizaco/Confide](https://github.com/Zizaco/confide).
+
 Role and permissions, take a look at [Zizaco/Entrust](https://github.com/Zizaco/entrust/tree/1.0).
