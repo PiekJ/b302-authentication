@@ -4,17 +4,19 @@
     "authors": [
         {
             "name": "Jos Piek",
-            "email": "jos@b302.nl"
+            "email": "info@jospiek.nl"
         }
     ],
     "require": {
         "php": ">=5.4.0",
-        "piek-j/laravel-rbac": "~1.0",
-        "lud/club": "1.0.2"
+        "illuminate/support": "4.2.*",
+        "zizaco/entrust": "1.2.5",
+        "zizaco/confide": "4.3.0"
     },
     "autoload": {
         "classmap": [
-            "src/migrations"
+            "src/migrations",
+            "src/controllers"
         ],
         "psr-0": {
             "PiekJ\\B302Authentication\\": "src/"

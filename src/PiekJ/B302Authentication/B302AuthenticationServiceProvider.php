@@ -1,5 +1,6 @@
 <?php namespace PiekJ\B302Authentication;
 
+use Illuminate\Foundation\AliasLoader;
 use Illuminate\Support\ServiceProvider;
 
 class B302AuthenticationServiceProvider extends ServiceProvider {
@@ -20,8 +21,12 @@ class B302AuthenticationServiceProvider extends ServiceProvider {
 	{
 		$this->package('piek-j/b302-authentication', 'b302-auth');
 
-        $this->commands('command.b302-auth.migrate');
-        $this->commands('command.b302-auth.create-user');
+		$this->commands(
+			'command.b302-auth.migration',
+			'command.b302-auth.create-user'
+		);
+
+		include __DIR__ . '/../../routes.php';
 	}
 
 	/**
@@ -31,31 +36,44 @@ class B302AuthenticationServiceProvider extends ServiceProvider {
 	 */
 	public function register()
 	{
-		// Register the needed ServiceProviders
-		$this->app->register('PiekJ\LaravelRbac\LaravelRbacServiceProvider');
-		$this->app->register('Lud\Club\ClubServiceProvider');
+		$this->registerDependencies();
 
-        // Register the needed alias
-		$this->app->alias('Rbac', 'PiekJ\LaravelRbac\RbacFacade');
-
-		// Register the install command
-		$this->app['command.b302-auth.migrate'] = $this->app->share(function($app)
-        {
-            return new MigrateCommand();
-        });
-
-        $this->app['command.b302-auth.create-user'] = $this->app->share(function($app)
-        {
-            return new CreateUserCommand();
-        });
+		$this->registerCommands();
 	}
 
-    public function provides()
-    {
-        return array(
-            'command.b302-auth.migrate',
-            'command.b302-auth.create-user',
-        );
-    }
+	private function registerDependencies()
+	{
+		// Register the needed ServiceProviders
+		$this->app->register('Zizaco\Confide\ServiceProvider');
+		$this->app->register('Zizaco\Entrust\EntrustServiceProvider');
+
+        // Register the needed aliases
+        AliasLoader::getInstance()->alias('Confide', 'Zizaco\Confide\Facade');
+        AliasLoader::getInstance()->alias('Entrust', 'Zizaco\Entrust\EntrustFacade');
+	}
+
+	private function registerCommands()
+	{
+		$this->app->bind('command.b302-auth.migration', function() {
+			return new MigrationCommand();
+		});
+
+		$this->app->bind('command.b302-auth.create-user', function() {
+			return new CreateUserCommand();
+		});
+	}
+
+	/**
+	 * Get the services provided by the provider.
+	 *
+	 * @return array
+	 */
+	public function provides()
+	{
+		return array(
+			'command.b302-auth.migration',
+			'command.b302-auth.create-user'
+		);
+	}
 
 }
