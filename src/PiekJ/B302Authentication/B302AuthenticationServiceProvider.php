@@ -18,7 +18,10 @@ class B302AuthenticationServiceProvider extends ServiceProvider {
 	 */
 	public function boot()
 	{
-		$this->package('piek-j/b302-authentication');
+		$this->package('piek-j/b302-authentication', 'b302-auth');
+
+        $this->commands('command.b302-auth.migrate');
+        $this->commands('command.b302-auth.create-user');
 	}
 
 	/**
@@ -29,25 +32,30 @@ class B302AuthenticationServiceProvider extends ServiceProvider {
 	public function register()
 	{
 		// Register the needed ServiceProviders
-		$this->app->register('Zizaco\Entrust\EntrustServiceProvider');
+		$this->app->register('PiekJ\LaravelRbac\LaravelRbacServiceProvider');
 		$this->app->register('Lud\Club\ClubServiceProvider');
 
-		$this->app->alias('Entrust', 'Zizaco\Entrust\EntrustFacade');
+        // Register the needed alias
+		$this->app->alias('Rbac', 'PiekJ\LaravelRbac\RbacFacade');
 
 		// Register the install command
-		$this->app['command.b302-authentication.create-tables'] = $this->app->share(function($app)
+		$this->app['command.b302-auth.migrate'] = $this->app->share(function($app)
         {
-            return new CreateTablesCommand();
+            return new MigrateCommand();
         });
 
-        $this->commands(array('command.b302-authentication.create-tables'));
-
-        $this->app['command.b302-authentication.create-user'] = $this->app->share(function($app)
+        $this->app['command.b302-auth.create-user'] = $this->app->share(function($app)
         {
             return new CreateUserCommand();
         });
-
-        $this->commands(array('command.b302-authentication.create-user'));
 	}
+
+    public function provides()
+    {
+        return array(
+            'command.b302-auth.migrate',
+            'command.b302-auth.create-user',
+        );
+    }
 
 }

@@ -4,21 +4,21 @@ use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
 
-class CreateTablesCommand extends Command {
+class MigrateCommand extends Command {
 
 	/**
 	 * The console command name.
 	 *
 	 * @var string
 	 */
-	protected $name = 'b302-auth:create-tables';
+	protected $name = 'b302-auth:migrate';
 
 	/**
 	 * The console command description.
 	 *
 	 * @var string
 	 */
-	protected $description = 'Creates the needed migration files.';
+	protected $description = 'Performs a migrate with the needed tables';
 
 	/**
 	 * Create a new command instance.
@@ -37,10 +37,10 @@ class CreateTablesCommand extends Command {
 	 */
 	public function fire()
 	{
-		$this->info('Create needed migration files...');
 		$this->call('club:users-table');
 		$this->call('auth:reminders-table');
-		$this->call('entrust:migration');
+		$this->call('migrate', array('--package' => 'piek-j/laravel-rbac'));
+		$this->call('migrate');
 	}
 
 	/**

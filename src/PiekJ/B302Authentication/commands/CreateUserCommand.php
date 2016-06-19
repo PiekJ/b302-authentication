@@ -3,7 +3,9 @@
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Input\InputArgument;
-use Lud\Club\Club;
+use PiekJ\LaravelRbac\Role;
+use PiekJ\LaravelRbac\Permission;
+use Config;
 use Hash;
 
 class CreateUserCommand extends Command {
@@ -38,7 +40,7 @@ class CreateUserCommand extends Command {
     {
         parent::__construct();
 
-        $this->modelName = Club::modelName();
+        $this->modelName = Config::get('auth.model');
     }
 
     /**
@@ -54,19 +56,18 @@ class CreateUserCommand extends Command {
         $adminUser->password = Hash::make('admin');
         $adminUser->save();
 
-        $adminRole = new Role();
-        $adminRole->name = 'Admin';
-        $adminRole->save();
-
-        $adminUser->attachRole($adminRole);
-
         $manageUsersPermission = new Permission();
         $manageUsersPermission->name = 'manage_users';
         $manageUsersPermission->display_name = 'Manage Users';
         $manageUsersPermission->save();
 
-        $adminRole->perms()->sync(array($manageUsersPermission->id));
-        $this->info('Default user created !');
+        $adminRole = new Role();
+        $adminRole->name = 'Admin';
+        $adminRole->save();
+
+        $adminRole->attachPermission($manageUsersPermission);
+
+        $adminUser->attachRole($adminRole);
     }
 
     /**
