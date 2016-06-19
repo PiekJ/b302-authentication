@@ -12,8 +12,8 @@ To install this package, follow the steps below:
 3. add the service provider ``PiekJ\B302Authentication\B302AuthenticationServiceProvider`` to your app.php config;
 4. change the model in your auth.php config to ``PiekJ\B302Authentication\User``;
 5. run the following commands ``php artisan config:publish zizaco/confide`` and ``php artisan config:publish zizaco/entrust``;
-6. change the role in the ``config/package/zizaco/confide/config.php`` to ``PiekJ\B302Authentication\Role``;
-7. change the permission in the ``config/package/zizaco/confide/config.php`` to ``PiekJ\B302Authentication\Permission``;
+6. change the role in the ``config/package/zizaco/entrust/config.php`` to ``PiekJ\B302Authentication\Role``;
+7. change the permission in the ``config/package/zizaco/entrust/config.php`` to ``PiekJ\B302Authentication\Permission``;
 8. run the following commands ``php artisan b302-auth:migration``, ``php artisan migrate`` and ``php artisan b302-auth:create-user``.
 
 Go visit http://yoururl/users/login to login with the newly created user (email: admin@admin.nl, password: admin).
