@@ -37,7 +37,7 @@ class MigrationCommand extends Command {
 	 */
 	public function fire()
 	{
-		$this->call('confide:migration', ['--username']);
+		$this->call('confide:migration', ['--username' => true]);
 		$this->call('entrust:migration');
 	}
 
