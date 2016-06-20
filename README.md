@@ -28,8 +28,9 @@ Go visit http://yoururl/users/login to login with the newly created user (email:
 | /users/create | Shows up the signup form |
 | /users/forgot_password | The form to request a password reset mail |
 | /users/reset_password/{{token}} | Fill in your new password to reset |
+| /users/confirm/{{token}} | Here the users confirm his account |
 
-For more detailed urls view [routes.php](src/routes.php) and the [B302AuthUserController.php](src/controllers/B302AuthUserController.php).
+For more detailed urls view [routes.php](src/routes.php) and the [B302AuthUserController.php](src/controllers/B302AuthUsersController.php).
 
 ### Updating templates
 
