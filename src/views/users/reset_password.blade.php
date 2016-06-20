@@ -5,5 +5,5 @@
 @stop
 
 @section('content')
-    {{ Confide::makeResetPasswordForm()->render() }}
+    {{ Confide::makeResetPasswordForm($token)->render() }}
 @stop

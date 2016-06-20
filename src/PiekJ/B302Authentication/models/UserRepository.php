@@ -3,6 +3,7 @@
 
 
 use App;
+use Hash;
 use Config;
 use Confide;
 

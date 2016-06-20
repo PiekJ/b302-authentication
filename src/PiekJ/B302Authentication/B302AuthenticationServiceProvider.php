@@ -23,7 +23,8 @@ class B302AuthenticationServiceProvider extends ServiceProvider {
 
 		$this->commands(
 			'command.b302-auth.migration',
-			'command.b302-auth.create-user'
+			'command.b302-auth.create-user',
+			'command.b302-auth.publish'
 		);
 
 		include __DIR__ . '/../../routes.php';
@@ -61,6 +62,10 @@ class B302AuthenticationServiceProvider extends ServiceProvider {
 		$this->app->bind('command.b302-auth.create-user', function() {
 			return new CreateUserCommand();
 		});
+
+		$this->app->bind('command.b302-auth.publish', function() {
+			return new PublishCommand();
+		});
 	}
 
 	/**
@@ -72,7 +77,8 @@ class B302AuthenticationServiceProvider extends ServiceProvider {
 	{
 		return array(
 			'command.b302-auth.migration',
-			'command.b302-auth.create-user'
+			'command.b302-auth.create-user',
+			'command.b302-auth.publish',
 		);
 	}
 

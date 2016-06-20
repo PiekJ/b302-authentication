@@ -5,7 +5,7 @@
  *
  * Implements actions regarding user management
  */
-class UsersController extends Controller
+class B302AuthUsersController extends Controller
 {
 
     /**
