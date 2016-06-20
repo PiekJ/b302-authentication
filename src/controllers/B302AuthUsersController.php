@@ -1,7 +1,7 @@
 <?php
 
 /**
- * UsersController Class
+ * B302AuthUsersController Class
  *
  * Implements actions regarding user management
  */
@@ -43,12 +43,12 @@ class B302AuthUsersController extends Controller
                 );
             }
 
-            return Redirect::action('UsersController@login')
+            return Redirect::action('B302AuthUsersController@login')
                 ->with('notice', Lang::get('confide::confide.alerts.account_created'));
         } else {
             $error = $user->errors()->all(':message');
 
-            return Redirect::action('UsersController@create')
+            return Redirect::action('B302AuthUsersController@create')
                 ->withInput(Input::except('password'))
                 ->with('error', $error);
         }
@@ -89,7 +89,7 @@ class B302AuthUsersController extends Controller
                 $err_msg = Lang::get('confide::confide.alerts.wrong_credentials');
             }
 
-            return Redirect::action('UsersController@login')
+            return Redirect::action('B302AuthUsersController@login')
                 ->withInput(Input::except('password'))
                 ->with('error', $err_msg);
         }
@@ -106,11 +106,11 @@ class B302AuthUsersController extends Controller
     {
         if (Confide::confirm($code)) {
             $notice_msg = Lang::get('confide::confide.alerts.confirmation');
-            return Redirect::action('UsersController@login')
+            return Redirect::action('B302AuthUsersController@login')
                 ->with('notice', $notice_msg);
         } else {
             $error_msg = Lang::get('confide::confide.alerts.wrong_confirmation');
-            return Redirect::action('UsersController@login')
+            return Redirect::action('B302AuthUsersController@login')
                 ->with('error', $error_msg);
         }
     }
@@ -134,11 +134,11 @@ class B302AuthUsersController extends Controller
     {
         if (Confide::forgotPassword(Input::get('email'))) {
             $notice_msg = Lang::get('confide::confide.alerts.password_forgot');
-            return Redirect::action('UsersController@login')
+            return Redirect::action('B302AuthUsersController@login')
                 ->with('notice', $notice_msg);
         } else {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_forgot');
-            return Redirect::action('UsersController@doForgotPassword')
+            return Redirect::action('B302AuthUsersController@doForgotPassword')
                 ->withInput()
                 ->with('error', $error_msg);
         }
@@ -174,11 +174,11 @@ class B302AuthUsersController extends Controller
         // By passing an array with the token, password and confirmation
         if ($repo->resetPassword($input)) {
             $notice_msg = Lang::get('confide::confide.alerts.password_reset');
-            return Redirect::action('UsersController@login')
+            return Redirect::action('B302AuthUsersController@login')
                 ->with('notice', $notice_msg);
         } else {
             $error_msg = Lang::get('confide::confide.alerts.wrong_password_reset');
-            return Redirect::action('UsersController@resetPassword', array('token'=>$input['token']))
+            return Redirect::action('B302AuthUsersController@resetPassword', array('token'=>$input['token']))
                 ->withInput()
                 ->with('error', $error_msg);
         }
