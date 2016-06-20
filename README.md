@@ -35,6 +35,7 @@ For more detailed urls view [routes.php](src/routes.php) and the [B302AuthUserCo
 ### Updating templates
 
 You can use the command ``php artisan view:publish piek-j\b302-authentication`` to copy the files to ``app/views/packages/piek-j/b302-authentication`` where you can edit them.
+
 To edit the views of the forms and emails use the following command ``php artisan view:publish zizaco/confide`` to copy the files to ``ap/views/packages/zizaco/confide`` where you can edit them.
 
 ### More information
