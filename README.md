@@ -11,7 +11,7 @@ To install this package, follow the steps below:
 2. run the command ``composer update`` to install the package;
 3. add the service provider ``PiekJ\B302Authentication\B302AuthenticationServiceProvider`` to your app.php config;
 4. change the model in your auth.php config to ``PiekJ\B302Authentication\User``;
-5. run the following command ``php artisan b302-auth:publish --config --view
+5. run the following command ``php artisan b302-auth:publish --config --view``;
 ~~5. run the following commands ``php artisan config:publish zizaco/confide`` and ``php artisan config:publish zizaco/entrust``;
 6. change the role in the ``config/package/zizaco/entrust/config.php`` to ``PiekJ\B302Authentication\Role``;
 7. change the permission in the ``config/package/zizaco/entrust/config.php`` to ``PiekJ\B302Authentication\Permission``;
