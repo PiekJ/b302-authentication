@@ -11,7 +11,6 @@
 */
 Route::group(['prefix' => 'users'], function() {
     Route::get('create', 'B302AuthUsersController@create');
-    Route::get('/', 'B302AuthUsersController@login');
     Route::post('/', 'B302AuthUsersController@store');
     Route::get('login', 'B302AuthUsersController@login');
     Route::post('login', 'B302AuthUsersController@doLogin');

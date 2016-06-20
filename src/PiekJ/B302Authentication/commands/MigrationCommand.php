@@ -37,8 +37,8 @@ class MigrationCommand extends Command {
 	 */
 	public function fire()
 	{
-		$this->call('migrate', ['--package' => 'zizaco/confide']);
-		$this->call('migrate', ['--package' => 'zizaco/entrust']);
+		$this->call('confide:migration', ['--username' => true]);
+		$this->call('entrust:migration');
 	}
 
 	/**
