@@ -8,7 +8,7 @@ class B302AuthenticationTest extends TestCase {
     private $unconfirmedUser;
 
     /**
-     * Set up some default properties
+     * Set up some default properties.
      */
     public function setUp()
     {
@@ -47,34 +47,31 @@ class B302AuthenticationTest extends TestCase {
 
 
     /**
-     * Test the login form
+     * Test the login form.
      */
     public function testLoginForm()
     {
-        // do a request to the users/login
+        // Get login page.
         $crawler = $this->client->request('GET', '/users/login');
 
-        // check if the response is Ok
         $this->assertTrue($this->client->getResponse()->isOk());
 
-        // check if login form is displayed
         $this->assertEquals(1, $crawler->filter('html:contains("Login")')->count());
 
-        // fill in the form with wrong details
+
+        // Try to login with wrong details.
         $form = $crawler->selectButton('Login')->form();
 
         $form['email'] = $this->user->email;
         $form['password'] = 'admin';
 
-        // submit the form
         $crawler = $this->client->submit($form);
 
-        // check if the response redirects to the login page with the needed information
         $this->assertRedirectedToAction('B302AuthUsersController@login');
         $this->assertSessionHas('error');
         $this->assertHasOldInput();
 
-        // change password to the right password
+        // Try to login with right details.
         $form['password'] = 'test123';
 
         $crawler = $this->client->submit($form);
@@ -83,7 +80,7 @@ class B302AuthenticationTest extends TestCase {
 
         Auth::logout();
 
-        // try to login with a unconfirmed user
+        // Try to login with a unconfirmed user.
         $form['email'] = $this->unconfirmedUser->email;
         $form['password'] = 'test123';
 
@@ -95,20 +92,18 @@ class B302AuthenticationTest extends TestCase {
     }
 
     /**
-     * Test the registration form
+     * Test the registration form.
      */
     public function testCreateForm()
     {
-        // do a request to the users/login
         $crawler = $this->client->request('GET', '/users/create');
 
-        // check if the response is Ok
         $this->assertTrue($this->client->getResponse()->isOk());
 
-        // check if login form is displayed
         $this->assertEquals(1, $crawler->filter('html:contains("Confirm Password")')->count());
 
-        // fill in the form with wrong details
+
+        // Try to register with invalid details.
         $form = $crawler->selectButton('Create new account')->form();
 
         $form['username'] = 'Admin';
@@ -116,60 +111,54 @@ class B302AuthenticationTest extends TestCase {
         $form['password'] = '';
         $form['password_confirmation'] = '';
 
-        // submit the form
         $crawler = $this->client->submit($form);
 
-        // check if the response redirects to the create page with the needed information
         $this->assertRedirectedToAction('B302AuthUsersController@create');
         $this->assertSessionHas('error');
         $this->assertHasOldInput();
 
-        // fill in complete with existing details
+        // Try to register with existing details.
         $form['username'] = 'Test';
         $form['email'] = 'admin@admin.nl';
         $form['password'] = 'test123';
         $form['password_confirmation'] = 'test123';
 
-        // submit the form
         $crawler = $this->client->submit($form);
 
-        // check if the response redirects to the create page with the needed information
         $this->assertRedirectedToAction('B302AuthUsersController@create');
         $this->assertSessionHas('error');
         $this->assertHasOldInput();
 
-        // fill in complete with the right details
+        // Try to register with right details.
         $form['username'] = 'Test';
         $form['email'] = 'test@test.nl';
         $form['password'] = 'test123';
         $form['password_confirmation'] = 'test123';
 
-        // submit the form
         $crawler = $this->client->submit($form);
 
-        // check if the response redirects to the create page with the needed information
         $this->assertRedirectedToAction('B302AuthUsersController@login');
         $this->assertSessionHas('notice');
 
-        // check if user is inserted
+        // Check if user is inserted.
         $insertedUser = User::where('email', 'test@test.nl')->first();
         $this->assertNotEmpty($insertedUser->id);
     }
 
     /**
-     * Test the confirmation form
+     * Test the confirmation form.
      */
     public function testConfirmForm()
     {
         $user = User::where('email', $this->unconfirmedUser->email)->first();
 
-         // do a request to the users/confirm/{{token}} with wrong activation code
+        // Do a request with a invalid token.
         $crawler = $this->client->request('GET', '/users/confirm/test12323434234sdfsadfasdfas');
 
         $this->assertRedirectedToAction('B302AuthUsersController@login');
         $this->assertSessionHas('error');
 
-        // do a request to the users/confirm/{{token}} with right activation code
+        // Do a request with a valid token.
         $crawler = $this->client->request('GET', '/users/confirm/' . $user->confirmation_code);
 
         $this->assertRedirectedToAction('B302AuthUsersController@login');
@@ -180,21 +169,19 @@ class B302AuthenticationTest extends TestCase {
     }
 
     /**
-     * Test the forgot password forms
+     * Test the forgot password forms.
      */
     public function testForgotPasswordForm()
     {
-         // do a request to the users/forgot_password
+        // Get the password forget form.
         $crawler = $this->client->request('GET', '/users/forgot_password');
 
-        // check if the response is Ok
         $this->assertTrue($this->client->getResponse()->isOk());
 
-        // check if login form is displayed
         $this->assertEquals(1, $crawler->filter('html:contains("Email")')->count());
         $this->assertEquals(0, $crawler->filter('html:contains("Password")')->count());
 
-        // fill in the form with wrong details
+        // Try to fill in wrong email.
         $form = $crawler->selectButton('Continue')->form();
 
         $form['email'] = 'test123@admin.nl';
@@ -204,7 +191,7 @@ class B302AuthenticationTest extends TestCase {
         $this->assertSessionHas('error');
         $this->assertRedirectedToAction('B302AuthUsersController@forgotPassword');
 
-        // fill in the form with right details
+        // Try to fill in right email.
         $form['email'] = $this->user->email;
 
         $crawler = $this->client->submit($form);
@@ -214,10 +201,11 @@ class B302AuthenticationTest extends TestCase {
     }
 
     /**
-     * Test the reset password form
+     * Test the reset password form.
      */
     public function testResetPasswordForm()
     {
+        // Make a token for the user.
         $token = Confide::forgotPassword($this->user->email);
         $this->assertNotEquals(false, $token);
 
@@ -225,11 +213,12 @@ class B302AuthenticationTest extends TestCase {
 
         $this->assertTrue($this->client->getResponse()->isOk());
 
-         // check if reset password form is displayed
+         // Check if reset password form is displayed.
         $this->assertEquals(0, $crawler->filter('html:contains("Email")')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("Password")')->count());
         $this->assertEquals(1, $crawler->filter('html:contains("Confirm Password")')->count());
 
+        // Fill in the password and try to change it.
         $form = $crawler->selectButton('Continue')->form();
         
         $form['password'] = 'test123';
